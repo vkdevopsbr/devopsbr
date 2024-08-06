@@ -1,50 +1,50 @@
 #!/bin/bash
 
+# Função para imprimir o status de cada etapa
+print_status() {
+    local step="$1"
+    local message="$2"
+    local status="$3"
+    local cols=$(tput cols)
+    local line_length=${#message}
+    local padding=$((cols - line_length - 10))
+    printf "%s %-${padding}s [%s]\n" "$step" "$message" "$status"
+}
+
 # Atualizar o sistema
-echo "Atualizando o sistema..."
-apt-get update && apt-get upgrade -y
-echo "Sistema atualizado com sucesso!"
+print_status "1" "Atualizando o sistema..." "Em andamento"
+apt-get update && apt-get upgrade -y && print_status "1" "Atualizando o sistema..." "Sucesso" || print_status "1" "Atualizando o sistema..." "Falha"
+
+# Instalar curl
+print_status "2" "Instalando curl..." "Em andamento"
+apt-get install -y curl && print_status "2" "Instalando curl..." "Sucesso" || print_status "2" "Instalando curl..." "Falha"
 
 # Instalar Docker
-echo "Instalando Docker..."
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
-echo "Docker instalado com sucesso!"
+print_status "3" "Instalando Docker..." "Em andamento"
+curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && print_status "3" "Instalando Docker..." "Sucesso" || print_status "3" "Instalando Docker..." "Falha"
 
 # Instalar Docker Compose
-echo "Instalando Docker Compose..."
-curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-echo "Docker Compose instalado com sucesso!"
+print_status "4" "Instalando Docker Compose..." "Em andamento"
+curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && print_status "4" "Instalando Docker Compose..." "Sucesso" || print_status "4" "Instalando Docker Compose..." "Falha"
 
 # Instalar Portainer
-echo "Instalando Portainer..."
-docker volume create portainer_data
-docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
-echo "Portainer instalado com sucesso!"
+print_status "5" "Instalando Portainer..." "Em andamento"
+docker volume create portainer_data && docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce && print_status "5" "Instalando Portainer..." "Sucesso" || print_status "5" "Instalando Portainer..." "Falha"
 
 # Instalar Ansible
-echo "Instalando Ansible..."
-apt-get install -y ansible
-echo "Ansible instalado com sucesso!"
+print_status "6" "Instalando Ansible..." "Em andamento"
+apt-get install -y ansible && print_status "6" "Instalando Ansible..." "Sucesso" || print_status "6" "Instalando Ansible..." "Falha"
 
 # Instalar Python
-echo "Instalando Python..."
-apt-get install -y python3 python3-pip
-echo "Python instalado com sucesso!"
+print_status "7" "Instalando Python..." "Em andamento"
+apt-get install -y python3 python3-pip && print_status "7" "Instalando Python..." "Sucesso" || print_status "7" "Instalando Python..." "Falha"
 
 # Instalar Go
-echo "Instalando Go..."
-wget https://go.dev/dl/go1.16.5.linux-amd64.tar.gz
-tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
-echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
-source ~/.profile
-echo "Go instalado com sucesso!"
+print_status "8" "Instalando Go..." "Em andamento"
+wget https://go.dev/dl/go1.16.5.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz && echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile && source ~/.profile && print_status "8" "Instalando Go..." "Sucesso" || print_status "8" "Instalando Go..." "Falha"
 
 # Limpeza
-echo "Limpando arquivos temporários..."
-rm get-docker.sh
-rm go1.16.5.linux-amd64.tar.gz
-echo "Arquivos temporários limpos com sucesso!"
+print_status "9" "Limpando arquivos temporários..." "Em andamento"
+rm get-docker.sh go1.16.5.linux-amd64.tar.gz && print_status "9" "Limpando arquivos temporários..." "Sucesso" || print_status "9" "Limpando arquivos temporários..." "Falha"
 
-echo "Setup dev completo!"
+print_status "10" "Setup dev completo!" ""
