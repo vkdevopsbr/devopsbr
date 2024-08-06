@@ -22,8 +22,7 @@ apt-get install -y curl && print_status "2" "Instalando curl..." "Sucesso" || pr
 # Instalar Docker
 print_status "3" "Instalando Docker..." "Em andamento"
 curl -fsSL https://get.docker.com -o get-docker.sh
-chmod +x get-docker.sh
-sed -i 's/+ sleep 20/+ sleep 0/' get-docker.sh # Remove delay for WSL detection
+sed -i '/+ sleep 20/d' get-docker.sh  # Remove a linha que contém a pausa de 20 segundos
 sh get-docker.sh && print_status "3" "Instalando Docker..." "Sucesso" || print_status "3" "Instalando Docker..." "Falha"
 
 # Instalar Docker Compose
