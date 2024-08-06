@@ -12,6 +12,17 @@ success() {
     echo -e "\033[1;32m$1 [Sucesso]\033[0m"
 }
 
+# Função para exibir mensagens de erro
+error() {
+    echo -e "\033[1;31m$1 [Falha]\033[0m"
+}
+
+# Verificar se o script está sendo executado como root
+if [ "$EUID" -ne 0 ]; then 
+    error "Por favor, execute como root"
+    exit 1
+fi
+
 # Atualizar o sistema
 log "Atualizando o sistema..."
 apt-get update && apt-get upgrade -y
