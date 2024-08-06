@@ -21,7 +21,10 @@ apt-get install -y curl && print_status "2" "Instalando curl..." "Sucesso" || pr
 
 # Instalar Docker
 print_status "3" "Instalando Docker..." "Em andamento"
-curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && print_status "3" "Instalando Docker..." "Sucesso" || print_status "3" "Instalando Docker..." "Falha"
+curl -fsSL https://get.docker.com -o get-docker.sh
+chmod +x get-docker.sh
+sed -i 's/+ sleep 20/+ sleep 0/' get-docker.sh # Remove delay for WSL detection
+sh get-docker.sh && print_status "3" "Instalando Docker..." "Sucesso" || print_status "3" "Instalando Docker..." "Falha"
 
 # Instalar Docker Compose
 print_status "4" "Instalando Docker Compose..." "Em andamento"
