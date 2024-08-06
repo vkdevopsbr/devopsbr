@@ -29,6 +29,9 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 sudo usermod -aG docker $USER
 
 # Atualiza o grupo docker para o usuário atual sem precisar reiniciar a sessão
-newgrp docker
+newgrp docker << END
+docker --version
+docker ps
+END
 
 echo "Docker instalado e configurado com sucesso!"
