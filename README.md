@@ -9,8 +9,8 @@ Tudo aqui é direto ao ponto e feito pra ser prático.
 ## 📁 Estrutura do Repositório
 
 - **scripts/**: Scripts para instalação, manutenção e automação.
-- **studies/**: Materiais de estudo sobre:
-- **tools/**: Guias sobre ferramentas que uso no dia a dia
+- **studies/**: Materiais de estudo.
+- **tools/**: Guias sobre ferramentas de uso no dia a dia
 
 ## 🚀 Como Usar
 
