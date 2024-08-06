@@ -90,14 +90,14 @@ cleanup() {
 
 # Função para registrar logs
 log() {
-  local LOGFILE="/var/log/setup_dev.log"
+  local LOGFILE="$HOME/setup_dev.log"
   echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOGFILE"
 }
 
 # Função principal
 main() {
-  log "Iniciando configuração do ambiente de desenvolvimento..."
   check_root
+  log "Iniciando configuração do ambiente de desenvolvimento..."
   install_packages
   install_docker
   install_portainer
