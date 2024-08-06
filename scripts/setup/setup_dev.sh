@@ -12,21 +12,14 @@ success() {
     echo -e "\033[1;32m$1 [Sucesso]\033[0m"
 }
 
-# Verificar se sudo está disponível
-if command -v sudo > /dev/null; then
-    SUDO="sudo"
-else
-    SUDO=""
-fi
-
 # Atualizar o sistema
 log "Atualizando o sistema..."
-$SUDO apt-get update && $SUDO apt-get upgrade -y
+apt-get update && apt-get upgrade -y
 success "Sistema atualizado!"
 
 # Instalar curl
 log "Instalando curl..."
-$SUDO apt-get install -y curl
+apt-get install -y curl
 success "curl instalado!"
 
 # Instalar Docker
@@ -45,8 +38,8 @@ fi
 log "Instalando Docker Compose..."
 if ! command -v docker-compose &> /dev/null
 then
-    $SUDO curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    $SUDO chmod +x /usr/local/bin/docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
     success "Docker Compose instalado!"
 else
     success "Docker Compose já está instalado!"
@@ -55,8 +48,8 @@ fi
 # Instalar Portainer
 log "Instalando Portainer..."
 if [ ! "$(docker ps -q -f name=portainer)" ]; then
-    $SUDO docker volume create portainer_data
-    $SUDO docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+    docker volume create portainer_data
+    docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
     success "Portainer instalado!"
 else
     success "Portainer já está instalado!"
@@ -66,7 +59,7 @@ fi
 log "Instalando Ansible..."
 if ! command -v ansible &> /dev/null
 then
-    $SUDO apt-get install -y ansible
+    apt-get install -y ansible
     success "Ansible instalado!"
 else
     success "Ansible já está instalado!"
@@ -76,7 +69,7 @@ fi
 log "Instalando Python..."
 if ! command -v python3 &> /dev/null
 then
-    $SUDO apt-get install -y python3 python3-pip
+    apt-get install -y python3 python3-pip
     success "Python instalado!"
 else
     success "Python já está instalado!"
@@ -87,7 +80,7 @@ log "Instalando Go..."
 if ! command -v go &> /dev/null
 then
     wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz
-    $SUDO tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
     echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
     source ~/.profile
     rm go1.16.5.linux-amd64.tar.gz
