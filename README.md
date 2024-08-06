@@ -8,17 +8,9 @@ Tudo aqui é direto ao ponto e feito pra ser prático.
 
 ## 📁 Estrutura do Repositório
 
-- **scripts/**: Scripts para instalação, manutenção e automação. Dividido em:
-  - **setup/**: Para instalar e configurar ferramentas.
-  - **maintenance/**: Manutenção do sistema.
-  - **automation/**: Automação de tarefas repetitivas.
+- **scripts/**: Scripts para instalação, manutenção e automação.
 - **studies/**: Materiais de estudo sobre:
-  - **docker/**: Tudo sobre Docker.
-  - **kubernetes/**: O básico e o avançado sobre Kubernetes.
-  - **ansible/**: Playbooks e boas práticas com Ansible.
-  - **terraform/**: Estruturando infra com Terraform.
 - **tools/**: Guias sobre ferramentas que uso no dia a dia
-
 
 ## 🚀 Como Usar
 
