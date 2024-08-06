@@ -28,11 +28,23 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # Adiciona o usuário atual ao grupo docker
 sudo usermod -aG docker $USER
 
-# Executa um novo shell com o grupo docker
-exec sg docker newgrp `id -gn` << END
-docker --version
-docker ps
-END
+# Atualiza o grupo docker para o usuário atual sem precisar reiniciar a sessão
+sudo newgrp docker
+
+# Cria o volume para dados do Portainer
+docker volume create portainer_data
+
+# Executa o container do Portainer com privilégios elevados
+docker run -d \
+  -p 8000:8000 \
+  -p 9000:9000 \
+  -p 9443:9443 \
+  --name portainer \
+  --restart=always \
+  --privileged \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
 
 
-echo "Docker instalado e configurado com sucesso!"
+echo "Setup Docker instalado e configurado com sucesso!"
