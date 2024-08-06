@@ -1,104 +1,67 @@
 #!/bin/bash
 
-# Função para imprimir o status de cada etapa
-print_status() {
-    local step="$1"
-    local message="$2"
-    local status="$3"
-    local cols=$(tput cols)
-    local line_length=${#message}
-    local padding=$((cols - line_length - 10))
-    printf "%s %-${padding}s [%s]\n" "$step" "$message" "$status"
+log() {
+    echo -e "\033[1;34m$1\033[0m"
 }
 
-# Verificar se sudo está disponível
-if command -v sudo > /dev/null; then
-    SUDO="sudo"
-else
-    SUDO=""
-fi
+success() {
+    echo -e "\033[1;32m$1 [Sucesso]\033[0m"
+}
+
+in_progress() {
+    echo -e "\033[1;33m$1 [Em andamento]\033[0m"
+}
 
 # Atualizar o sistema
-print_status "1" "Atualizando o sistema..." "Em andamento"
-if $SUDO apt-get update && $SUDO apt-get upgrade -y; then
-    print_status "1" "Atualizando o sistema..." "Sucesso"
-else
-    print_status "1" "Atualizando o sistema..." "Falha"
-    exit 1
-fi
+in_progress "1 Atualizando o sistema..."
+sudo apt-get update && sudo apt-get upgrade -y
+success "1 Atualizando o sistema..."
 
 # Instalar curl
-print_status "2" "Instalando curl..." "Em andamento"
-if $SUDO apt-get install -y curl; then
-    print_status "2" "Instalando curl..." "Sucesso"
-else
-    print_status "2" "Instalando curl..." "Falha"
-    exit 1
-fi
+in_progress "2 Instalando curl..."
+sudo apt-get install -y curl
+success "2 Instalando curl..."
 
 # Instalar Docker
-print_status "3" "Instalando Docker..." "Em andamento"
-if curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh; then
-    print_status "3" "Instalando Docker..." "Sucesso"
-else
-    print_status "3" "Instalando Docker..." "Falha"
-    exit 1
-fi
+in_progress "3 Instalando Docker..."
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+success "3 Instalando Docker..."
 
 # Instalar Docker Compose
-print_status "4" "Instalando Docker Compose..." "Em andamento"
-if $SUDO curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && $SUDO chmod +x /usr/local/bin/docker-compose; then
-    print_status "4" "Instalando Docker Compose..." "Sucesso"
-else
-    print_status "4" "Instalando Docker Compose..." "Falha"
-    exit 1
-fi
+in_progress "4 Instalando Docker Compose..."
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+success "4 Instalando Docker Compose..."
 
 # Instalar Portainer
-print_status "5" "Instalando Portainer..." "Em andamento"
-if $SUDO docker volume create portainer_data && $SUDO docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce; then
-    print_status "5" "Instalando Portainer..." "Sucesso"
-else
-    print_status "5" "Instalando Portainer..." "Falha"
-    exit 1
-fi
+in_progress "5 Instalando Portainer..."
+sudo docker volume create portainer_data
+sudo docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+success "5 Instalando Portainer..."
 
 # Instalar Ansible
-print_status "6" "Instalando Ansible..." "Em andamento"
-if $SUDO apt-get install -y ansible; then
-    print_status "6" "Instalando Ansible..." "Sucesso"
-else
-    print_status "6" "Instalando Ansible..." "Falha"
-    exit 1
-fi
+in_progress "6 Instalando Ansible..."
+sudo apt-get install -y ansible
+success "6 Instalando Ansible..."
 
 # Instalar Python
-print_status "7" "Instalando Python..." "Em andamento"
-if $SUDO apt-get install -y python3 python3-pip; then
-    print_status "7" "Instalando Python..." "Sucesso"
-else
-    print_status "7" "Instalando Python..." "Falha"
-    exit 1
-fi
+in_progress "7 Instalando Python..."
+sudo apt-get install -y python3 python3-pip
+success "7 Instalando Python..."
 
 # Instalar Go
-print_status "8" "Instalando Go..." "Em andamento"
-if wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz && $SUDO tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz; then
-    echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
-    source ~/.profile
-    print_status "8" "Instalando Go..." "Sucesso"
-else
-    print_status "8" "Instalando Go..." "Falha"
-    exit 1
-fi
+in_progress "8 Instalando Go..."
+wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
+echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
+source ~/.profile
+success "8 Instalando Go..."
 
 # Limpeza
-print_status "9" "Limpando arquivos temporários..." "Em andamento"
-if rm -f get-docker.sh go1.16.5.linux-amd64.tar.gz; then
-    print_status "9" "Limpando arquivos temporários..." "Sucesso"
-else
-    print_status "9" "Limpando arquivos temporários..." "Falha"
-    exit 1
-fi
+in_progress "9 Limpando arquivos temporários..."
+rm get-docker.sh
+rm go1.16.5.linux-amd64.tar.gz
+success "9 Limpando arquivos temporários..."
 
-print_status "10" "Setup dev completo!" ""
+success "Setup dev completo!"
